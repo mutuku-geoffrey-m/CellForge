@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="100%" height="100%" style="background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#495057" />
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Title & Banner -->
+  <text x="500" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#212529" letter-spacing="0.5">CellForge Manufacturing Process Flow &amp; Decision Network</text>
+  <text x="500" y="52" text-anchor="middle" font-size="12" fill="#6c757d">Discrete-Event Simulation, LPBF Batching, NDT Inspection &amp; Capacity Optimization</text>
+
+  <!-- Stage 1: Order Launch & Routing Split -->
+  <rect x="30" y="75" width="940" height="90" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="1.5" stroke-dasharray="4" />
+  <text x="45" y="95" font-size="11" font-weight="700" fill="#495057" text-transform="uppercase" letter-spacing="0.5">Stage 1: Production Launch &amp; Routing Allocation</text>
+
+  <rect x="60" y="108" width="220" height="42" rx="5" fill="#e9ecef" stroke="#adb5bd" stroke-width="1" filter="url(#shadow)" />
+  <text x="170" y="134" text-anchor="middle" font-size="12" font-weight="600" fill="#212529">Customer Order: Target Demand (D)</text>
+
+  <polygon points="410,129 460,105 510,129 460,153" fill="#fff3cd" stroke="#ffeeba" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="460" y="133" text-anchor="middle" font-size="11" font-weight="700" fill="#856404">Route Split</text>
+
+  <rect x="630" y="95" width="280" height="30" rx="4" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" />
+  <text x="770" y="115" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">Fraction xA: Aluminum 6061-T6 Billet Stock</text>
+
+  <rect x="630" y="130" width="280" height="30" rx="4" fill="#f3e5f5" stroke="#ce93d8" stroke-width="1" />
+  <text x="770" y="150" text-anchor="middle" font-size="11" font-weight="600" fill="#4a148c">Fraction xB: AlSi10Mg Spherical Powder</text>
+
+  <line x1="280" y1="129" x2="408" y2="129" stroke="#495057" stroke-width="1.5" marker-end="url(#arrow)" />
+  <line x1="510" y1="120" x2="628" y2="110" stroke="#1976d2" stroke-width="1.5" marker-end="url(#arrow)" />
+  <line x1="510" y1="138" x2="628" y2="145" stroke="#7b1fa2" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Stage 2: Parallel Manufacturing Routes -->
+  <rect x="30" y="180" width="940" height="175" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="1.5" stroke-dasharray="4" />
+  <text x="45" y="200" font-size="11" font-weight="700" fill="#495057" text-transform="uppercase" letter-spacing="0.5">Stage 2: Parallel Manufacturing Routes</text>
+
+  <!-- Route A: Subtractive -->
+  <rect x="50" y="212" width="425" height="130" rx="6" fill="#ffffff" stroke="#bbdefb" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="65" y="232" font-size="11" font-weight="700" fill="#1565c0">Route A: Conventional Subtractive (CNC)</text>
+
+  <rect x="70" y="250" width="105" height="65" rx="4" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" />
+  <text x="122" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">Station 1: Saw</text>
+  <text x="122" y="295" text-anchor="middle" font-size="9" fill="#546e7a">Billet Cut (8 min)</text>
+
+  <rect x="210" y="250" width="115" height="65" rx="4" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" />
+  <text x="267" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">Station 2: CNC Mill</text>
+  <text x="267" y="295" text-anchor="middle" font-size="9" fill="#546e7a">3-Axis Rough (32 min)</text>
+
+  <rect x="360" y="250" width="100" height="65" rx="4" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" />
+  <text x="410" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#0d47a1">Station 3: Deburr</text>
+  <text x="410" y="295" text-anchor="middle" font-size="9" fill="#546e7a">Vibratory (10 min)</text>
+
+  <line x1="175" y1="282" x2="208" y2="282" stroke="#1976d2" stroke-width="1.5" marker-end="url(#arrow)" />
+  <line x1="325" y1="282" x2="358" y2="282" stroke="#1976d2" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Route B: Additive -->
+  <rect x="525" y="212" width="425" height="130" rx="6" fill="#ffffff" stroke="#e1bee7" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="540" y="232" font-size="11" font-weight="700" fill="#6a1b9a">Route B: Metal Additive (LPBF)</text>
+
+  <rect x="545" y="250" width="115" height="65" rx="4" fill="#f3e5f5" stroke="#ce93d8" stroke-width="1" />
+  <text x="602" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#4a148c">Station 1: LPBF</text>
+  <text x="602" y="295" text-anchor="middle" font-size="9" fill="#7b1fa2">Batch 4 (405 min)</text>
+
+  <rect x="690" y="250" width="115" height="65" rx="4" fill="#f3e5f5" stroke="#ce93d8" stroke-width="1" />
+  <text x="747" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#4a148c">Station 2: Furnace</text>
+  <text x="747" y="295" text-anchor="middle" font-size="9" fill="#7b1fa2">Stress Relief (45 min)</text>
+
+  <rect x="835" y="250" width="100" height="65" rx="4" fill="#f3e5f5" stroke="#ce93d8" stroke-width="1" />
+  <text x="885" y="275" text-anchor="middle" font-size="11" font-weight="600" fill="#4a148c">Station 3: Finish</text>
+  <text x="885" y="295" text-anchor="middle" font-size="9" fill="#7b1fa2">Datum Mill (18 min)</text>
+
+  <line x1="660" y1="282" x2="688" y2="282" stroke="#7b1fa2" stroke-width="1.5" marker-end="url(#arrow)" />
+  <line x1="805" y1="282" x2="833" y2="282" stroke="#7b1fa2" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Feed connectors from Stage 1 to Stage 2 -->
+  <line x1="770" y1="125" x2="770" y2="170" stroke="#1976d2" stroke-width="1.5" />
+  <line x1="770" y1="170" x2="122" y2="170" stroke="#1976d2" stroke-width="1.5" />
+  <line x1="122" y1="170" x2="122" y2="248" stroke="#1976d2" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <line x1="770" y1="160" x2="770" y2="200" stroke="#7b1fa2" stroke-width="1.5" />
+  <line x1="770" y1="200" x2="602" y2="200" stroke="#7b1fa2" stroke-width="1.5" />
+  <line x1="602" y1="200" x2="602" y2="248" stroke="#7b1fa2" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- Stage 3: Shared Quality Control & Rework Network -->
+  <rect x="30" y="370" width="940" height="135" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="1.5" stroke-dasharray="4" />
+  <text x="45" y="390" font-size="11" font-weight="700" fill="#495057" text-transform="uppercase" letter-spacing="0.5">Stage 3: Shared Quality Inspection, Rework &amp; Scrap Accounting</text>
+
+  <rect x="60" y="415" width="220" height="65" rx="5" fill="#fff8e1" stroke="#ffe082" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="170" y="442" text-anchor="middle" font-size="12" font-weight="700" fill="#f57f17">Shared Station 4: NDT Booth</text>
+  <text x="170" y="462" text-anchor="middle" font-size="10" fill="#6c757d">Liquid Penetrant Testing (12 min)</text>
+
+  <polygon points="370,447 420,422 470,447 420,472" fill="#e8f5e9" stroke="#c8e6c9" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="420" y="451" text-anchor="middle" font-size="11" font-weight="700" fill="#2e7d32">Passed?</text>
+
+  <rect x="560" y="425" width="180" height="44" rx="4" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1" filter="url(#shadow)" />
+  <text x="650" y="445" text-anchor="middle" font-size="11" font-weight="600" fill="#1b5e20">Station 5: Packaging</text>
+  <text x="650" y="460" text-anchor="middle" font-size="9" fill="#388e3c">Cleaning &amp; Dispatch (6 min)</text>
+
+  <rect x="340" y="480" width="160" height="22" rx="3" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" />
+  <text x="420" y="495" text-anchor="middle" font-size="10" font-weight="600" fill="#b71c1c">Rework Cycle == 0?</text>
+
+  <rect x="560" y="475" width="160" height="26" rx="4" fill="#fff3e0" stroke="#ffcc80" stroke-width="1" />
+  <text x="640" y="492" text-anchor="middle" font-size="10" font-weight="600" fill="#e65100">Rework Bench (20 min)</text>
+
+  <rect x="760" y="475" width="100" height="26" rx="4" fill="#ffebee" stroke="#ef5350" stroke-width="1" />
+  <text x="810" y="492" text-anchor="middle" font-size="10" font-weight="700" fill="#c62828">Scrap Loss</text>
+
+  <!-- Flow lines into NDT -->
+  <line x1="410" y1="315" x2="410" y2="360" stroke="#1976d2" stroke-width="1.5" />
+  <line x1="410" y1="360" x2="170" y2="360" stroke="#1976d2" stroke-width="1.5" />
+  <line x1="170" y1="360" x2="170" y2="413" stroke="#1976d2" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <line x1="885" y1="315" x2="885" y2="360" stroke="#7b1fa2" stroke-width="1.5" />
+  <line x1="885" y1="360" x2="170" y2="360" stroke="#7b1fa2" stroke-width="1.5" />
+
+  <line x1="280" y1="447" x2="368" y2="447" stroke="#495057" stroke-width="1.5" marker-end="url(#arrow)" />
+  <line x1="470" y1="447" x2="558" y2="447" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#arrow)" />
+  <text x="510" y="440" font-size="10" font-weight="700" fill="#2e7d32">Pass</text>
+
+  <line x1="420" y1="472" x2="420" y2="478" stroke="#d32f2f" stroke-width="1.5" />
+  <line x1="500" y1="491" x2="558" y2="491" stroke="#f57c00" stroke-width="1.5" marker-end="url(#arrow)" />
+  <text x="525" y="486" font-size="9" font-weight="700" fill="#f57c00">1st Fail</text>
+
+  <line x1="720" y1="491" x2="758" y2="491" stroke="#d32f2f" stroke-width="1.5" marker-end="url(#arrow)" />
+  <text x="735" y="486" font-size="9" font-weight="700" fill="#c62828">2nd Fail</text>
+
+  <!-- Rework return to NDT -->
+  <path d="M 640 475 L 640 405 L 170 405 L 170 413" fill="none" stroke="#f57c00" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#arrow)" />
+
+  <!-- Stage 4: Output & KPIs -->
+  <rect x="30" y="520" width="940" height="95" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="1.5" stroke-dasharray="4" />
+  <text x="45" y="540" font-size="11" font-weight="700" fill="#495057" text-transform="uppercase" letter-spacing="0.5">Stage 4: Finished Goods, Analytics &amp; Operations Research</text>
+
+  <rect x="60" y="555" width="220" height="42" rx="4" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="170" y="581" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">Conforming Finished Goods</text>
+
+  <rect x="350" y="555" width="280" height="42" rx="4" fill="#ffffff" stroke="#90a4ae" stroke-width="1" filter="url(#shadow)" />
+  <text x="490" y="574" text-anchor="middle" font-size="11" font-weight="600" fill="#263238">Performance KPIs &amp; Availability</text>
+  <text x="490" y="589" text-anchor="middle" font-size="9" fill="#78909c">Throughput, Lead Time, OEE (A x P x Q), WIP</text>
+
+  <rect x="700" y="555" width="250" height="42" rx="4" fill="#ffffff" stroke="#90a4ae" stroke-width="1" filter="url(#shadow)" />
+  <text x="825" y="574" text-anchor="middle" font-size="11" font-weight="600" fill="#263238">Engineering Economics &amp; MILP</text>
+  <text x="825" y="589" text-anchor="middle" font-size="9" fill="#78909c">Unit Cost, Break-Even, Payback, Crossover</text>
+
+  <line x1="650" y1="469" x2="650" y2="540" stroke="#2e7d32" stroke-width="1.5" />
+  <line x1="650" y1="540" x2="170" y2="540" stroke="#2e7d32" stroke-width="1.5" />
+  <line x1="170" y1="540" x2="170" y2="553" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <line x1="280" y1="576" x2="348" y2="576" stroke="#495057" stroke-width="1.5" marker-end="url(#arrow)" />
+  <line x1="630" y1="576" x2="698" y2="576" stroke="#495057" stroke-width="1.5" marker-end="url(#arrow)" />
+</svg>

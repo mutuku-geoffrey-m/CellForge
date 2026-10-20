@@ -1,0 +1,6 @@
+Scenario ID,Scenario Name,Parts Started,Conforming Parts,Scrapped Parts,Throughput (units/hr),Mean Lead Time (min),Median Lead Time (min),P95 Lead Time (min),Time-Weighted WIP,Bottleneck Station,Bottleneck Util (%),First-Pass Yield (%),Overall Yield (%),Scrap Rate (%),On-Time Delivery (%),Total CAPEX ($),Operating Cost ($),Cost / Conforming Part ($),Break-Even Units,Payback Period (yrs),Total Energy (kWh)
+baseline,Baseline Production Cell,131,128,3,0.8,238.5,70.6,847.6,3.4,Laser Powder Bed Fusion (Metal 3D Printer),42.6,94.7,97.7,2.3,97.7,687500.0,16609.0,169.93,110.7,28.51,3069.1
+additive_centric,Additive-Centric Route,131,121,2,0.76,2078.8,1897.4,4998.4,31.2,Support Removal & Stress-Relief Furnace,42.3,90.2,92.4,1.5,98.4,1007500.0,18947.0,220.23,169.5,99.9,3883.5
+high_demand,High-Demand Surge (+50%),196,191,5,1.19,616.8,72.4,2364.1,12.7,Laser Powder Bed Fusion (Metal 3D Printer),68.6,92.9,97.4,2.6,97.4,687500.0,21564.0,139.82,112.4,6.37,4063.1
+quality_stress,Quality Stress (High Defect),131,129,2,0.81,446.3,72.5,1862.8,6.2,Laser Powder Bed Fusion (Metal 3D Printer),44.7,87.0,98.5,1.5,98.5,687500.0,17051.0,172.03,113.6,32.88,3134.4
+optimized,MILP-Optimized Configuration,153,153,0,0.96,71.4,69.6,91.9,1.1,CNC Machining Center (Rough & Semi-Finish),50.7,94.1,100.0,0.0,100.0,592500.0,16263.0,135.92,93.3,6.31,2504.5
