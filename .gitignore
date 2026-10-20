@@ -37,3 +37,6 @@ Thumbs.db
 
 # Archive packages
 *.zip
+
+# Legacy nested directory
+cellforge-manufacturing-lab/
