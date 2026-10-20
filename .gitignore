@@ -34,3 +34,6 @@ Thumbs.db
 *.stl
 *.3mf
 *.png
+
+# Archive packages
+*.zip
