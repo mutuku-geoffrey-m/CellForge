@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>CellForge Manufacturing Lab</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #080d1a;
+        color: #f8fafc;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 20%, #111e38 0%, #080d1a 80%);
+      }
+
+      /* Subtle Grid Background */
+      .bg-grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+      }
+
+      /* Top Header Bar */
+      .top-bar {
+        position: absolute;
+        top: 40px;
+        left: 80px;
+        right: 80px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 20px;
+        z-index: 50;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .brand-badge {
+        background: #38bdf8;
+        color: #080d1a;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        padding: 6px 14px;
+        border-radius: 4px;
+      }
+      .brand-title {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #f8fafc;
+      }
+      .top-meta {
+        font-size: 14px;
+        color: #cbd5e1;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+      }
+
+      /* Scene Containers */
+      .scene {
+        position: absolute;
+        top: 130px;
+        left: 80px;
+        right: 80px;
+        bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      /* Typography */
+      .section-tag {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: #38bdf8;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .hero-title {
+        font-size: 58px;
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+        margin-bottom: 20px;
+      }
+      .hero-subtitle {
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1.45;
+        color: #cbd5e1;
+        max-width: 1400px;
+        margin-bottom: 40px;
+      }
+
+      /* Cards Grid */
+      .cards-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+        width: 100%;
+      }
+      .cards-row-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        width: 100%;
+      }
+      .cards-row-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        width: 100%;
+      }
+
+      .card {
+        background: #111a2e;
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+      .card-badge {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        padding: 6px 12px;
+        border-radius: 4px;
+      }
+      .card-badge-blue {
+        background: rgba(2, 132, 199, 0.25);
+        color: #38bdf8;
+        border: 1px solid #0284c7;
+      }
+      .card-badge-purple {
+        background: rgba(147, 51, 234, 0.25);
+        color: #c084fc;
+        border: 1px solid #9333ea;
+      }
+      .card-badge-green {
+        background: rgba(16, 185, 129, 0.25);
+        color: #34d399;
+        border: 1px solid #10b981;
+      }
+      .card-badge-amber {
+        background: rgba(245, 158, 11, 0.25);
+        color: #fbbf24;
+        border: 1px solid #f59e0b;
+      }
+
+      .card-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #f8fafc;
+        margin-bottom: 12px;
+      }
+      .card-desc {
+        font-size: 17px;
+        line-height: 1.5;
+        color: #cbd5e1;
+        margin-bottom: 24px;
+      }
+      .card-metric-box {
+        background: #090e1a;
+        border-radius: 8px;
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .metric-label {
+        font-size: 14px;
+        color: #cbd5e1;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .metric-val {
+        font-size: 22px;
+        font-weight: 800;
+        color: #f8fafc;
+      }
+
+      /* Benchmark Highlight Card */
+      .highlight-card {
+        border: 2px solid #10b981;
+        background: linear-gradient(180deg, #132729 0%, #0d1b1d 100%);
+      }
+      .highlight-title {
+        color: #34d399;
+      }
+
+      /* Metric Pills Bar */
+      .pills-bar {
+        display: flex;
+        gap: 16px;
+        margin-top: 28px;
+      }
+      .stat-pill {
+        background: #0d1627;
+        border: 1px solid #1e293b;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #38bdf8;
+      }
+      .stat-pill-green {
+        border-color: #10b981;
+        color: #34d399;
+        background: rgba(16, 185, 129, 0.12);
+      }
+
+      /* Outro Footer */
+      .outro-footer {
+        margin-top: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #111a2e;
+        border: 1px solid #1e293b;
+        border-radius: 10px;
+        padding: 20px 32px;
+      }
+      .outro-text {
+        font-size: 18px;
+        font-weight: 600;
+        color: #cbd5e1;
+      }
+      .outro-badge {
+        background: #38bdf8;
+        color: #080d1a;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 10px 24px;
+        border-radius: 6px;
+        letter-spacing: 0.05em;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="25"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="bg-grid"></div>
+
+      <!-- Top Persistent Bar -->
+      <div class="top-bar">
+        <div class="brand">
+          <span class="brand-badge">[CELLFORGE]</span>
+          <span class="brand-title">Manufacturing Simulation &amp; Capacity Lab</span>
+        </div>
+        <div class="top-meta">Discrete-Event Simulation | Mixed-Integer Linear Programming | Economics</div>
+      </div>
+
+      <!-- SCENE 1: The Strategic Dilemma (0.0s - 4.5s) -->
+      <div id="scene1" class="scene">
+        <div class="section-tag">[CAPITAL ALLOCATION PROBLEM]</div>
+        <h1 class="hero-title">Conventional CNC vs. Metal 3D Printing</h1>
+        <p class="hero-subtitle">
+          Given a demand target, equipment budget, machine reliability, and inspection standards, what manufacturing
+          configuration delivers acceptable parts at lowest practical cost?
+        </p>
+
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-badge card-badge-blue">[ROUTE A: SUBTRACTIVE]</span>
+              <span class="metric-label">High Volume Efficiency</span>
+            </div>
+            <div class="card-title">Alloy 6061-T6 Extruded Billet</div>
+            <div class="card-desc">
+              Saw cutoff (8 min) followed by 3-axis CNC vertical milling (32 min). Low raw material cost ($15.50), but
+              over 65% of billet volume is cut away into chip scrap.
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Material Cost</span>
+              <span class="metric-val">$15.50 / bracket</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-badge card-badge-purple">[ROUTE B: ADDITIVE LPBF]</span>
+              <span class="metric-label">Tooling-Free Agility</span>
+            </div>
+            <div class="card-title">AlSi10Mg Spherical Powder</div>
+            <div class="card-desc">
+              Laser Powder Bed Fusion builds 4 brackets per plate (405 min batch). High raw feedstock cost ($38.20) and
+              long thermal cycles, but near-zero tooling amortization.
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Material Cost</span>
+              <span class="metric-val">$38.20 / bracket</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 2: The Dual-Engine Architecture (4.5s - 11.0s) -->
+      <div id="scene2" class="scene">
+        <div class="section-tag">[OPERATIONS RESEARCH ARCHITECTURE]</div>
+        <h1 class="hero-title">Mathematical Planning Meets Factory Physics</h1>
+        <p class="hero-subtitle">
+          CellForge combines deterministic Mixed-Integer Linear Programming with stochastic discrete-event simulation to
+          bridge the gap between spreadsheet theory and plant-floor reality.
+        </p>
+
+        <div class="cards-row-3">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-badge card-badge-blue">[SOLVER: SCIPY MILP]</span>
+            </div>
+            <div class="card-title">Integer Capacity Planning</div>
+            <div class="card-desc">
+              Solves exact branch-and-bound integer program to select optimal machine counts and volume split under
+              capital budget constraints.
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Method</span>
+              <span class="metric-val">scipy.optimize.milp</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-badge card-badge-purple">[SIMULATOR: SIMPY]</span>
+            </div>
+            <div class="card-title">Discrete-Event Factory Core</div>
+            <div class="card-desc">
+              Models machine breakdowns (MTBF Exponential, MTTR Lognormal), LPBF build-plate staging buffers, and
+              Kingman queue surges.
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Dynamics</span>
+              <span class="metric-val">True Availability != Util</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-badge card-badge-amber">[QUALITY: NDT BOOTH]</span>
+            </div>
+            <div class="card-title">Shared Inspection &amp; Rework</div>
+            <div class="card-desc">
+              Dye-penetrant testing with probabilistic signal detection (TPR 94%, TNR 97%), single-cycle rework loops,
+              and sunk scrap loss accounting.
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Accounting</span>
+              <span class="metric-val">Mass Conservation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 3: The Empirical Benchmark (11.0s - 18.5s) -->
+      <div id="scene3" class="scene">
+        <div class="section-tag">[EMPIRICAL BENCHMARK: 160-HOUR CAMPAIGN]</div>
+        <h1 class="hero-title">Proven Optimization Results</h1>
+        <p class="hero-subtitle">
+          Comparing a baseline cell against an additive-centric route and the MILP-optimized configuration demonstrates
+          how queuing delays impact economics.
+        </p>
+
+        <div class="cards-row-3">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-badge card-badge-blue">[BASELINE HYBRID]</span>
+            </div>
+            <div class="card-title">70% CNC / 30% LPBF</div>
+            <div class="card-desc">Standard balanced cell meeting 120-unit demand target.</div>
+            <div class="card-metric-box" style="margin-bottom: 8px">
+              <span class="metric-label">Unit Cost</span>
+              <span class="metric-val">$169.93</span>
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Mean Lead Time</span>
+              <span class="metric-val">238.5 min</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-badge card-badge-purple">[ADDITIVE-CENTRIC]</span>
+            </div>
+            <div class="card-title">70% LPBF / 30% CNC</div>
+            <div class="card-desc">Explodes WIP (31 units) due to 6.75-hour batch cycle staging.</div>
+            <div class="card-metric-box" style="margin-bottom: 8px">
+              <span class="metric-label">Unit Cost</span>
+              <span class="metric-val">$220.23</span>
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Mean Lead Time</span>
+              <span class="metric-val" style="color: #f87171">2,078 min</span>
+            </div>
+          </div>
+
+          <div class="card highlight-card">
+            <div class="card-header">
+              <span class="card-badge card-badge-green">[MILP OPTIMIZED]</span>
+            </div>
+            <div class="card-title highlight-title">Optimal Resource Allocation</div>
+            <div class="card-desc">Restructures equipment counts and routes to minimize total relevant cost.</div>
+            <div class="card-metric-box" style="margin-bottom: 8px">
+              <span class="metric-label">Unit Cost</span>
+              <span class="metric-val" style="color: #34d399">$135.92</span>
+            </div>
+            <div class="card-metric-box">
+              <span class="metric-label">Mean Lead Time</span>
+              <span class="metric-val" style="color: #34d399">71.4 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pills-bar">
+          <div class="stat-pill stat-pill-green">[ -20% UNIT COST ]</div>
+          <div class="stat-pill stat-pill-green">[ -70% LEAD TIME ]</div>
+          <div class="stat-pill stat-pill-green">[ $95,000 CAPEX SAVED ]</div>
+          <div class="stat-pill stat-pill-green">[ 100% ON-TIME DELIVERY ]</div>
+          <div class="stat-pill">[ 6.3 YR PAYBACK ]</div>
+        </div>
+      </div>
+
+      <!-- SCENE 4: Open Engineering Rigor & Outro (18.5s - 25.0s) -->
+      <div id="scene4" class="scene">
+        <div class="section-tag">[VERIFIED OPEN-SOURCE ENGINEERING]</div>
+        <h1 class="hero-title">CellForge Manufacturing Lab</h1>
+        <p class="hero-subtitle">
+          A complete, reproducible manufacturing decision-support suite. Zero proprietary simulation black boxes. 100%
+          local Python execution.
+        </p>
+
+        <div class="cards-row-4">
+          <div class="card">
+            <div class="card-title" style="font-size: 20px">22 Automated Tests</div>
+            <div class="card-desc" style="font-size: 15px">
+              pytest suite verifying mass conservation, Monte Carlo stability &amp; boundary stress.
+            </div>
+            <span class="card-badge card-badge-green">[100% PASSING]</span>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="font-size: 20px">Parametric CAD</div>
+            <div class="card-desc" style="font-size: 15px">
+              OpenSCAD industrial bracket model with automated geometric validation.
+            </div>
+            <span class="card-badge card-badge-blue">[OPENSCAD]</span>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="font-size: 20px">Streamlit Dashboard</div>
+            <div class="card-desc" style="font-size: 15px">
+              Interactive scenario manager, crossover curve plots &amp; queue visualization.
+            </div>
+            <span class="card-badge card-badge-purple">[STREAMLIT]</span>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="font-size: 20px">MIT License</div>
+            <div class="card-desc" style="font-size: 15px">
+              Fully open-source, unrestricted academic &amp; commercial portfolio project.
+            </div>
+            <span class="card-badge card-badge-amber">[OPEN SOURCE]</span>
+          </div>
+        </div>
+
+        <div class="outro-footer">
+          <div class="outro-text">Simulation, optimization, and engineering economics for small-batch manufacturing.</div>
+          <div class="outro-badge">GITHUB: cellforge-manufacturing-lab</div>
+        </div>
+      </div>
+
+      <!-- Background Audio -->
+      <audio id="bgm" src="assets/music/music.mp3" data-start="0" data-duration="25"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+
+      // Scene 1 Animation (0.0s - 4.5s)
+      tl.set("#scene1", { autoAlpha: 1 }, 0);
+      tl.from("#scene1 .section-tag", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 0.2);
+      tl.from("#scene1 .hero-title", { opacity: 0, y: 25, duration: 0.6, ease: "power2.out" }, 0.4);
+      tl.from("#scene1 .hero-subtitle", { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" }, 0.6);
+      tl.from("#scene1 .card", { opacity: 0, y: 30, stagger: 0.2, duration: 0.7, ease: "power2.out" }, 0.8);
+      tl.to("#scene1", { opacity: 0, duration: 0.5, ease: "power2.in" }, 4.0);
+      tl.set("#scene1", { autoAlpha: 0 }, 4.5);
+
+      // Scene 2 Animation (4.5s - 11.0s)
+      tl.set("#scene2", { autoAlpha: 1 }, 4.5);
+      tl.from("#scene2 .section-tag", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 4.7);
+      tl.from("#scene2 .hero-title", { opacity: 0, y: 25, duration: 0.6, ease: "power2.out" }, 4.9);
+      tl.from("#scene2 .hero-subtitle", { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" }, 5.1);
+      tl.from("#scene2 .card", { opacity: 0, y: 30, stagger: 0.25, duration: 0.7, ease: "power2.out" }, 5.3);
+      tl.to("#scene2", { opacity: 0, duration: 0.5, ease: "power2.in" }, 10.5);
+      tl.set("#scene2", { autoAlpha: 0 }, 11.0);
+
+      // Scene 3 Animation (11.0s - 18.5s)
+      tl.set("#scene3", { autoAlpha: 1 }, 11.0);
+      tl.from("#scene3 .section-tag", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 11.2);
+      tl.from("#scene3 .hero-title", { opacity: 0, y: 25, duration: 0.6, ease: "power2.out" }, 11.4);
+      tl.from("#scene3 .hero-subtitle", { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" }, 11.6);
+      tl.from("#scene3 .card", { opacity: 0, y: 30, stagger: 0.2, duration: 0.7, ease: "power2.out" }, 11.8);
+      tl.from("#scene3 .stat-pill", { opacity: 0, scale: 0.9, stagger: 0.1, duration: 0.5, ease: "back.out(1.5)" }, 12.8);
+      tl.to("#scene3", { opacity: 0, duration: 0.5, ease: "power2.in" }, 18.0);
+      tl.set("#scene3", { autoAlpha: 0 }, 18.5);
+
+      // Scene 4 Animation (18.5s - 25.0s)
+      tl.set("#scene4", { autoAlpha: 1 }, 18.5);
+      tl.from("#scene4 .section-tag", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 18.7);
+      tl.from("#scene4 .hero-title", { opacity: 0, y: 25, duration: 0.6, ease: "power2.out" }, 18.9);
+      tl.from("#scene4 .hero-subtitle", { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" }, 19.1);
+      tl.from("#scene4 .card", { opacity: 0, y: 25, stagger: 0.15, duration: 0.6, ease: "power2.out" }, 19.3);
+      tl.from("#scene4 .outro-footer", { opacity: 0, y: 20, duration: 0.7, ease: "power2.out" }, 20.2);
+    </script>
+  </body>
+</html>
