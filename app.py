@@ -286,6 +286,91 @@ st.markdown(
         border-radius: 3px;
         border: 1px solid #1e293b;
     }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #1e293b;
+        border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #334155;
+    }
+
+    /* Focus Rings & Accessibility */
+    button:focus-visible, input:focus-visible, select:focus-visible {
+        outline: 2px solid #38bdf8 !important;
+        outline-offset: 1px !important;
+    }
+
+    /* Download Buttons */
+    .stDownloadButton > button {
+        background-color: #161f33 !important;
+        color: #f8fafc !important;
+        border: 1px solid #334155 !important;
+        border-radius: 4px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.04em !important;
+        padding: 7px 16px !important;
+    }
+    .stDownloadButton > button:hover {
+        background-color: #1e293b !important;
+        border-color: #38bdf8 !important;
+        color: #38bdf8 !important;
+    }
+
+    /* Expander Details Summary */
+    [data-testid="stExpander"] details summary {
+        background-color: #121829 !important;
+        border-radius: 5px !important;
+        padding: 8px 14px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        color: #e2e8f0 !important;
+        letter-spacing: 0.04em !important;
+    }
+    [data-testid="stExpander"] details summary:hover {
+        background-color: #161f33 !important;
+        color: #38bdf8 !important;
+    }
+
+    /* Sliders */
+    .stSlider [data-baseweb="slider"] {
+        margin-top: 4px;
+    }
+    .stSlider [role="slider"] {
+        background-color: #38bdf8 !important;
+        border: 2px solid #0f1422 !important;
+        box-shadow: none !important;
+    }
+    .stSlider div[data-testid="stThumbValue"] {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: #94a3b8;
+    }
+
+    /* Status Annunciator Alerts */
+    [data-testid="stAlert"] {
+        background-color: #0f1422 !important;
+        border: 1px solid #1e293b !important;
+        border-radius: 6px !important;
+        color: #cbd5e1 !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.82rem !important;
+    }
+    [data-testid="stAlert"] [data-testid="stMarkdownContainer"] p {
+        color: #cbd5e1 !important;
+        font-size: 0.82rem !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
