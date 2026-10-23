@@ -5,7 +5,7 @@
 The strategic capacity planning problem is formulated as a Mixed-Integer Linear Program (MILP), solved using `scipy.optimize.milp` via the HiGHS branch-and-cut engine.
 
 ### Sets and Indices
-- $s \in \mathcal{S}$: Manufacturing workstations, $\mathcal{S} = \{\text{saw}, \text{cnc\_mill}, \text{deburr}, \text{lpbf}, \text{post\_heat}, \text{cnc\_finish}, \text{inspection}, \text{packaging}\}$.
+- $s \in \mathcal{S}$: Manufacturing workstations, $\mathcal{S} = \{\text{saw}, \text{cnc-mill}, \text{deburr}, \text{lpbf}, \text{post-heat}, \text{cnc-finish}, \text{inspection}, \text{packaging}\}$.
 - $r \in \mathcal{R}$: Production routes, $\mathcal{R} = \{\text{conv}, \text{add}\}$.
 
 ### Decision Variables
@@ -25,7 +25,7 @@ The strategic capacity planning problem is formulated as a Mixed-Integer Linear 
   $$A_s = \frac{\text{MTBF}_s}{\text{MTBF}_s + \text{MTTR}_s}$$
 - $\eta_{\text{target}}$: Target planned utilization ceiling (default $0.85 = 85\%$) to mitigate queueing congestion.
 - $Y_r$: Expected overall conforming yield along route $r$, factoring in first-pass acceptance and rework recovery:
-  $$Y_r = (1 - p_{\text{def}, r}) + p_{\text{def}, r} \cdot \text{Sensitivity} \cdot p_{\text{rework\_succ}}$$
+  $$Y_r = (1 - p_{\text{def}, r}) + p_{\text{def}, r} \cdot \text{Sensitivity} \cdot p_{\text{rework-succ}}$$
 
 ### Objective Function
 Minimize total relevant manufacturing cost over the planning horizon:
@@ -47,8 +47,8 @@ $$\min_{m_s, x_r} \quad Z = \sum_{s \in \mathcal{S}} \left( \frac{\text{CAPEX}_s
    $$m_{\min, s} \le m_s \le m_{\max, s} \quad \forall s \in \mathcal{S}$$
 
 5. **Route-Equipment Coupling (Big-M Formulation)**:
-   $$x_{\text{conv}} \le M \cdot m_s \quad \forall s \in \{\text{saw}, \text{cnc\_mill}, \text{deburr}\}$$
-   $$x_{\text{add}} \le M \cdot m_s \quad \forall s \in \{\text{lpbf}, \text{post\_heat}, \text{cnc\_finish}\}$$
+   $$x_{\text{conv}} \le M \cdot m_s \quad \forall s \in \{\text{saw}, \text{cnc-mill}, \text{deburr}\}$$
+   $$x_{\text{add}} \le M \cdot m_s \quad \forall s \in \{\text{lpbf}, \text{post-heat}, \text{cnc-finish}\}$$
    Where $M = 500$ (an upper bound on total batch production).
 
 ---

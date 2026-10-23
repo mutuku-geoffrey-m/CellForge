@@ -161,7 +161,7 @@ $$\min_{m_s, x_r} \quad Z = \sum_{s \in \mathcal{S}} \left( \frac{\text{CAPEX}_s
 3. **Equipment Capital Budget**:
    $$\sum_{s \in \mathcal{S}} \text{CAPEX}_s \cdot m_s \le B_{\text{budget}}$$
 4. **Machine Bounds & Big-M Route Coupling**:
-   $$m_s \in \{m_{\min, s}, \dots, m_{\max, s}\}, \quad x_{\text{conv}} \le M \cdot m_{\text{cnc\_mill}}, \quad x_{\text{add}} \le M \cdot m_{\text{lpbf}}$$
+   $$m_s \in \{m_{\min, s}, \dots, m_{\max, s}\}, \quad x_{\text{conv}} \le M \cdot m_{\text{cnc-mill}}, \quad x_{\text{add}} \le M \cdot m_{\text{lpbf}}$$
 
 ---
 
