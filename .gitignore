@@ -24,6 +24,7 @@ htmlcov/
 .ruff_cache/
 .mypy_cache/
 .hyperframes/
+.taste-skill/
 
 # IDE and OS files
 .vscode/
