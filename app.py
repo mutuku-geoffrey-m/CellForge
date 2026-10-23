@@ -2,7 +2,7 @@
 
 Interactive decision-support laboratory comparing conventional CNC subtractive machining
 and laser powder-bed fusion (LPBF) additive manufacturing routes for custom industrial brackets.
-Designed according to industrial engineering operations terminal standards.
+Designed to industrial engineering terminal standards (Public Sans + JetBrains Mono, flat surfaces, zero neons).
 """
 
 from __future__ import annotations
@@ -32,62 +32,91 @@ from cellforge.simulation import SimulationEngine
 from cellforge.validation import validate_config, verify_simulation_results
 
 # =============================================================================
-# Streamlit Application Configuration & Precision Industrial Styling
+# Streamlit Application Configuration & Data-Terminal Workstation Styling
 # =============================================================================
 
 st.set_page_config(
-    page_title="CellForge // Manufacturing Operations Workstation",
+    page_title="CellForge // Industrial Operations Workstation",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Custom CSS: Industrial Precision Aesthetic (Linear + ClickHouse + SpaceX Hardware Telemetry)
+# Custom CSS: Data-Terminal Design System (taste-skill + awesome-design-md + web-design-guidelines)
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap');
 
-    /* Global Root & Background */
+    /* Color Tokens: data-terminal dark palette */
+    :root {
+        --ground: #171719;
+        --surface: #131217;
+        --raised: #212023;
+        --border: #222224;
+        --rule: #1b1a1f;
+        --control: #2a2a2e;
+        --control-border: #3a3a3e;
+        --text: #ffffff;
+        --muted: #8a8c92;
+        --accent: #4a8ad6;
+        --positive: #44a282;
+        --negative: #e5566f;
+        --warning: #d9a441;
+    }
+
+    /* Global Application Root */
     .stApp {
-        background-color: #090d16;
-        color: #cbd5e1;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--ground);
+        color: #dedee0;
+        font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Zero Gradients, Zero Box Shadows */
+    *, *::before, *::after {
+        box-shadow: none !important;
+    }
+
+    /* Header Bar */
+    header[data-testid="stHeader"] {
+        background-color: transparent !important;
     }
 
     /* Sidebar Styling */
     [data-testid="stSidebar"] {
-        background-color: #0b101b;
-        border-right: 1px solid #1e293b;
+        background-color: #111113;
+        border-right: 1px solid var(--border);
     }
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li {
-        font-size: 0.82rem;
-        color: #94a3b8;
+        font-size: 0.80rem;
+        color: var(--muted);
     }
     [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
         font-family: 'JetBrains Mono', monospace;
-        letter-spacing: 0.04em;
-        color: #f8fafc;
+        font-size: 0.86rem;
+        letter-spacing: 0.05em;
+        color: var(--text);
+        text-transform: uppercase;
     }
 
     /* Workstation Header Bar */
     .workstation-header {
-        background: #0f1422;
-        border: 1px solid #1e293b;
-        border-radius: 6px;
-        padding: 16px 20px;
-        margin-bottom: 20px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 14px 18px;
+        margin-bottom: 16px;
     }
     .workstation-title {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 1.15rem;
+        font-size: 1.10rem;
         font-weight: 700;
-        color: #f8fafc;
+        color: var(--text);
         letter-spacing: 0.05em;
     }
     .workstation-subtitle {
-        font-size: 0.80rem;
-        color: #94a3b8;
+        font-size: 0.78rem;
+        color: var(--muted);
         margin-top: 3px;
         line-height: 1.4;
     }
@@ -95,252 +124,162 @@ st.markdown(
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
-        margin-top: 10px;
+        margin-top: 8px;
     }
     .chip {
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.70rem;
         font-weight: 600;
         padding: 2px 7px;
-        border-radius: 4px;
-        border: 1px solid #1e293b;
-        background: #141c2e;
-        color: #94a3b8;
+        border-radius: 3px;
+        border: 1px solid var(--border);
+        background: var(--raised);
+        color: var(--muted);
         letter-spacing: 0.04em;
     }
     .chip-accent {
-        border-color: #0284c7;
-        color: #38bdf8;
-        background: rgba(2, 132, 199, 0.12);
+        border-color: #3568a3;
+        color: #6ba6ed;
+        background: #17212e;
     }
     .chip-success {
-        border-color: #059669;
-        color: #34d399;
-        background: rgba(5, 150, 105, 0.12);
+        border-color: #347e65;
+        color: #5fc39c;
+        background: #15241f;
     }
-    .chip-amber {
-        border-color: #d97706;
-        color: #fbbf24;
-        background: rgba(217, 119, 6, 0.12);
+    .chip-warning {
+        border-color: #b8882e;
+        color: #e6b758;
+        background: #252014;
     }
 
-    /* High-Density KPI Cards */
+    /* Flat High-Density KPI Cards (Typography Driven) */
     .imow-kpi-card {
-        background-color: #0f1422;
-        border: 1px solid #1e293b;
-        border-radius: 6px;
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
         padding: 12px 14px;
         margin-bottom: 10px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 96px;
+        min-height: 94px;
     }
     .imow-kpi-label {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Public Sans', sans-serif;
         font-size: 0.70rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #64748b;
+        letter-spacing: 0.06em;
+        color: var(--muted);
     }
     .imow-kpi-value {
         font-family: 'JetBrains Mono', monospace;
         font-variant-numeric: tabular-nums;
-        font-size: 1.55rem;
+        font-size: 1.50rem;
         font-weight: 700;
-        color: #f8fafc;
+        color: var(--text);
         letter-spacing: -0.02em;
         line-height: 1.15;
         margin-top: 4px;
     }
     .imow-kpi-sub {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.73rem;
-        color: #94a3b8;
+        font-size: 0.72rem;
+        color: var(--muted);
         margin-top: 4px;
     }
 
     /* Industrial Panel Containers */
     .imow-panel {
-        background-color: #0f1422;
-        border: 1px solid #1e293b;
-        border-radius: 6px;
-        padding: 16px 18px;
-        margin-bottom: 14px;
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
     }
     .imow-panel-header {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.82rem;
+        font-size: 0.80rem;
         font-weight: 600;
         letter-spacing: 0.06em;
-        color: #e2e8f0;
+        color: #e2e2e4;
         text-transform: uppercase;
         margin-bottom: 8px;
-        border-bottom: 1px solid #1e293b;
+        border-bottom: 1px solid var(--border);
         padding-bottom: 6px;
     }
 
     /* Custom Streamlit Tabs Override */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 6px;
-        border-bottom: 1px solid #1e293b;
+        gap: 4px;
+        border-bottom: 1px solid var(--border);
         background-color: transparent;
-        padding-bottom: 4px;
+        padding-bottom: 2px;
     }
     .stTabs [data-baseweb="tab"] {
-        background-color: #0f1422;
-        border: 1px solid #1e293b;
-        border-radius: 4px;
-        padding: 7px 14px;
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 6px 14px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.78rem;
+        font-size: 0.76rem;
         font-weight: 500;
-        color: #94a3b8;
+        color: var(--muted);
     }
     .stTabs [data-baseweb="tab"]:hover {
-        background-color: #161f33;
-        color: #f8fafc;
-        border-color: #334155;
+        background-color: var(--raised);
+        color: var(--text);
+        border-color: #3a3a3e;
     }
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        background-color: #161f33;
-        border-color: #38bdf8;
-        color: #f8fafc;
+        background-color: var(--raised);
+        border-color: var(--accent);
+        color: var(--text);
         font-weight: 600;
+        border-bottom: 2px solid var(--accent);
     }
 
     /* Buttons */
-    div.stButton > button:first-child {
-        background-color: #161f33;
-        color: #f8fafc;
-        border: 1px solid #334155;
-        border-radius: 4px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        padding: 7px 16px;
+    div.stButton > button {
+        background-color: var(--raised) !important;
+        color: var(--text) !important;
+        border: 1px solid var(--control-border) !important;
+        border-radius: 3px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.76rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.03em !important;
+        padding: 6px 14px !important;
     }
-    div.stButton > button:first-child:hover {
-        background-color: #1e293b;
-        border-color: #38bdf8;
-        color: #38bdf8;
+    div.stButton > button:hover {
+        background-color: #2a2a2e !important;
+        border-color: var(--accent) !important;
+        color: #6ba6ed !important;
     }
     div.stButton > button[kind="primary"] {
-        background-color: #0284c7;
-        color: #ffffff;
-        border: 1px solid #0284c7;
+        background-color: #3568a3 !important;
+        border-color: var(--accent) !important;
+        color: #ffffff !important;
     }
     div.stButton > button[kind="primary"]:hover {
-        background-color: #0369a1;
-        border-color: #0369a1;
-        color: #ffffff;
+        background-color: #285489 !important;
+        border-color: #5593e0 !important;
+        color: #ffffff !important;
     }
 
     /* Inputs, Sliders & Tables */
     .stNumberInput input, .stTextInput input {
-        background-color: #090d16;
-        border: 1px solid #1e293b;
-        color: #f8fafc;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.82rem;
-        border-radius: 4px;
+        background-color: var(--ground) !important;
+        border: 1px solid var(--border) !important;
+        color: var(--text) !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.80rem !important;
+        border-radius: 3px !important;
     }
     .stNumberInput input:focus, .stTextInput input:focus {
-        border-color: #38bdf8;
-    }
-    [data-testid="stExpander"] {
-        background-color: #0f1422;
-        border: 1px solid #1e293b;
-        border-radius: 6px;
-    }
-    div[data-testid="stTable"] table {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.80rem;
-        background-color: #0f1422;
-        border: 1px solid #1e293b;
-        color: #cbd5e1;
-    }
-    div[data-testid="stTable"] th {
-        background-color: #161f33;
-        color: #94a3b8;
-        font-weight: 600;
-        border-bottom: 1px solid #1e293b;
-    }
-    div[data-testid="stTable"] td {
-        border-bottom: 1px solid #1e293b;
-    }
-    .stDataFrame {
-        border: 1px solid #1e293b;
-        border-radius: 6px;
-    }
-
-    /* Code & Callout Blocks */
-    code {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.80rem;
-        background-color: #161f33;
-        color: #38bdf8;
-        padding: 2px 5px;
-        border-radius: 3px;
-        border: 1px solid #1e293b;
-    }
-
-    /* Scrollbars */
-    ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #090d16;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #1e293b;
-        border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #334155;
-    }
-
-    /* Focus Rings & Accessibility */
-    button:focus-visible, input:focus-visible, select:focus-visible {
-        outline: 2px solid #38bdf8 !important;
-        outline-offset: 1px !important;
-    }
-
-    /* Download Buttons */
-    .stDownloadButton > button {
-        background-color: #161f33 !important;
-        color: #f8fafc !important;
-        border: 1px solid #334155 !important;
-        border-radius: 4px !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.78rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.04em !important;
-        padding: 7px 16px !important;
-    }
-    .stDownloadButton > button:hover {
-        background-color: #1e293b !important;
-        border-color: #38bdf8 !important;
-        color: #38bdf8 !important;
-    }
-
-    /* Expander Details Summary */
-    [data-testid="stExpander"] details summary {
-        background-color: #121829 !important;
-        border-radius: 5px !important;
-        padding: 8px 14px !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.82rem !important;
-        font-weight: 600 !important;
-        color: #e2e8f0 !important;
-        letter-spacing: 0.04em !important;
-    }
-    [data-testid="stExpander"] details summary:hover {
-        background-color: #161f33 !important;
-        color: #38bdf8 !important;
+        border-color: var(--accent) !important;
+        outline: none !important;
     }
 
     /* Sliders */
@@ -348,28 +287,123 @@ st.markdown(
         margin-top: 4px;
     }
     .stSlider [role="slider"] {
-        background-color: #38bdf8 !important;
-        border: 2px solid #0f1422 !important;
-        box-shadow: none !important;
+        background-color: var(--accent) !important;
+        border: 2px solid var(--surface) !important;
     }
     .stSlider div[data-testid="stThumbValue"] {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.75rem;
-        color: #94a3b8;
+        font-size: 0.72rem;
+        color: var(--muted);
+    }
+
+    /* Expanders */
+    [data-testid="stExpander"] {
+        background-color: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 4px !important;
+    }
+    [data-testid="stExpander"] details summary {
+        background-color: var(--raised) !important;
+        border-radius: 3px !important;
+        padding: 7px 12px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        color: #dedee0 !important;
+        letter-spacing: 0.04em !important;
+    }
+    [data-testid="stExpander"] details summary:hover {
+        color: var(--accent) !important;
+    }
+
+    /* Data Tables */
+    div[data-testid="stTable"] table {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        color: #dedee0;
+    }
+    div[data-testid="stTable"] th {
+        background-color: var(--raised);
+        color: var(--muted);
+        font-weight: 600;
+        border-bottom: 1px solid var(--border);
+        text-transform: uppercase;
+        font-size: 0.70rem;
+        letter-spacing: 0.05em;
+    }
+    div[data-testid="stTable"] td {
+        border-bottom: 1px solid var(--rule);
+    }
+    .stDataFrame {
+        border: 1px solid var(--border);
+        border-radius: 4px;
     }
 
     /* Status Annunciator Alerts */
     [data-testid="stAlert"] {
-        background-color: #0f1422 !important;
-        border: 1px solid #1e293b !important;
-        border-radius: 6px !important;
-        color: #cbd5e1 !important;
+        background-color: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 4px !important;
+        color: #dedee0 !important;
         font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.82rem !important;
+        font-size: 0.78rem !important;
     }
     [data-testid="stAlert"] [data-testid="stMarkdownContainer"] p {
-        color: #cbd5e1 !important;
-        font-size: 0.82rem !important;
+        color: #dedee0 !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Download Buttons */
+    .stDownloadButton > button {
+        background-color: var(--raised) !important;
+        color: var(--text) !important;
+        border: 1px solid var(--control-border) !important;
+        border-radius: 3px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.76rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.03em !important;
+        padding: 6px 14px !important;
+    }
+    .stDownloadButton > button:hover {
+        background-color: #2a2a2e !important;
+        border-color: var(--accent) !important;
+        color: #6ba6ed !important;
+    }
+
+    /* Hairline Scrollbars */
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        background: var(--ground);
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #2a2a2e;
+        border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #3a3a3e;
+    }
+
+    /* Focus Rings & Accessibility */
+    button:focus-visible, input:focus-visible, select:focus-visible {
+        outline: 2px solid var(--accent) !important;
+        outline-offset: 1px !important;
+    }
+
+    /* Code Blocks */
+    code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        background-color: var(--raised);
+        color: #6ba6ed;
+        padding: 2px 5px;
+        border-radius: 3px;
+        border: 1px solid var(--border);
     }
     </style>
     """,
@@ -381,11 +415,11 @@ def style_chart(fig: go.Figure, height: int = 340, title: str | None = None) -> 
     """Apply consistent industrial workstation dark styling to a Plotly figure."""
     fig.update_layout(
         template="plotly_dark",
-        paper_bgcolor="#0f1422",
-        plot_bgcolor="#0f1422",
+        paper_bgcolor="#131217",
+        plot_bgcolor="#131217",
         font={
-            "family": "JetBrains Mono, -apple-system, sans-serif",
-            "color": "#94a3b8",
+            "family": "JetBrains Mono, Public Sans, -apple-system, sans-serif",
+            "color": "#8a8c92",
             "size": 11,
         },
         title={
@@ -393,7 +427,7 @@ def style_chart(fig: go.Figure, height: int = 340, title: str | None = None) -> 
             "font": {
                 "family": "JetBrains Mono, monospace",
                 "size": 12,
-                "color": "#f8fafc",
+                "color": "#ffffff",
             },
             "x": 0.01,
             "xanchor": "left",
@@ -401,16 +435,16 @@ def style_chart(fig: go.Figure, height: int = 340, title: str | None = None) -> 
         height=height,
         margin={"l": 40, "r": 20, "t": 40, "b": 40},
         xaxis={
-            "gridcolor": "#1e293b",
-            "zerolinecolor": "#334155",
-            "linecolor": "#334155",
-            "tickfont": {"size": 10, "color": "#94a3b8"},
+            "gridcolor": "#222224",
+            "zerolinecolor": "#3a3a3e",
+            "linecolor": "#3a3a3e",
+            "tickfont": {"size": 10, "color": "#8a8c92"},
         },
         yaxis={
-            "gridcolor": "#1e293b",
-            "zerolinecolor": "#334155",
-            "linecolor": "#334155",
-            "tickfont": {"size": 10, "color": "#94a3b8"},
+            "gridcolor": "#222224",
+            "zerolinecolor": "#3a3a3e",
+            "linecolor": "#3a3a3e",
+            "tickfont": {"size": 10, "color": "#8a8c92"},
         },
         legend={
             "orientation": "h",
@@ -418,14 +452,14 @@ def style_chart(fig: go.Figure, height: int = 340, title: str | None = None) -> 
             "y": 1.02,
             "xanchor": "right",
             "x": 1.0,
-            "font": {"size": 10, "color": "#cbd5e1"},
+            "font": {"size": 10, "color": "#bdbdc0"},
         },
     )
     return fig
 
 
 def render_kpi(label: str, value: str, subtext: str, badge: str | None = None) -> str:
-    """Render a high-density, flat industrial KPI card."""
+    """Render a flat, high-density industrial data-terminal KPI card."""
     badge_html = f"<span class='chip'>{badge}</span>" if badge else ""
     return f"""
     <div class="imow-kpi-card">
@@ -464,15 +498,37 @@ if "opt_result" not in st.session_state:
     st.session_state.opt_result = None
 
 # =============================================================================
-# Application Sidebar: Workstation Global Parameters
+# Application Sidebar: Workstation Global Parameters & Presets
 # =============================================================================
 
 with st.sidebar:
     st.markdown("### CELLFORGE // CONTROLS")
-    st.caption("Discrete-Event Simulation & MILP Optimization Workstation")
+    st.caption("Industrial Discrete-Event Simulation & Capacity Optimization")
     st.markdown("---")
 
-    st.markdown("**Operational Simulation Parameters**")
+    st.markdown("**Operational Presets**")
+    p_col1, p_col2 = st.columns(2)
+    with p_col1:
+        if st.button("Balanced Hybrid", use_container_width=True):
+            st.session_state.base_config.simulation.route_allocation_ratio = 0.60
+            st.session_state.base_config.simulation.target_demand_units = 120
+            st.rerun()
+        if st.button("Pure Subtractive", use_container_width=True):
+            st.session_state.base_config.simulation.route_allocation_ratio = 1.00
+            st.session_state.base_config.simulation.target_demand_units = 120
+            st.rerun()
+    with p_col2:
+        if st.button("Pure Additive", use_container_width=True):
+            st.session_state.base_config.simulation.route_allocation_ratio = 0.00
+            st.session_state.base_config.simulation.target_demand_units = 120
+            st.rerun()
+        if st.button("Demand Surge", use_container_width=True):
+            st.session_state.base_config.simulation.route_allocation_ratio = 0.50
+            st.session_state.base_config.simulation.target_demand_units = 250
+            st.rerun()
+
+    st.markdown("---")
+    st.markdown("**Global Simulation Controls**")
     horizon_hours = st.slider(
         "Simulation Horizon (Hours)",
         min_value=40.0,
@@ -508,14 +564,14 @@ with st.sidebar:
     st.markdown("---")
     st.markdown(
         """
-        **System Specification:**
+        **Workstation Routing Architecture:**
         - **Target Workpiece**: Industrial Mounting Bracket
         - **Route A**: Saw -> CNC Milling -> Deburr
         - **Route B**: LPBF (Batch 4) -> Heat Treat -> CNC Finish
         - **Shared**: Dye-Penetrant NDT & Packaging
         """
     )
-    st.caption("Engineering Decision-Support System | MIT License")
+    st.caption("CellForge Decision-Support Laboratory | MIT License")
 
 # Update base config parameters if modified in sidebar
 st.session_state.base_config.simulation.simulation_horizon_hours = horizon_hours
@@ -532,8 +588,8 @@ st.markdown(
     <div class="workstation-header">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
             <div>
-                <div class="workstation-title">CELLFORGE // MANUFACTURING OPERATIONS WORKSTATION</div>
-                <div class="workstation-subtitle">Dual-Route Subtractive/Additive Simulation, SciPy MILP Capacity Optimization & Engineering Economics</div>
+                <div class="workstation-title">CELLFORGE // INDUSTRIAL OPERATIONS WORKSTATION</div>
+                <div class="workstation-subtitle">Flexible Manufacturing Operations · AlSi10Mg LPBF Additive vs 6061-T6 CNC Subtractive Decision Support</div>
             </div>
             <div class="workstation-chips">
                 <span class="chip chip-accent">[ENGINE: SIMPY 4.1]</span>
@@ -551,19 +607,19 @@ st.markdown(
 # Main Workstation Tabs
 # =============================================================================
 
-tab_overview, tab_sim, tab_scenarios, tab_opt, tab_econ, tab_notes = st.tabs(
+tab_overview, tab_sim, tab_opt, tab_econ, tab_scenarios, tab_notes = st.tabs(
     [
-        "01 // SYSTEM OVERVIEW & MASS BALANCE",
-        "02 // SIMULATION STUDIO",
-        "03 // BENCHMARK SCENARIO MATRIX",
-        "04 // MILP CAPACITY PLANNING",
-        "05 // ENGINEERING ECONOMICS & NDT",
-        "06 // MATHEMATICAL SPECIFICATION",
+        "01 // CELL TELEMETRY & MASS BALANCE",
+        "02 // SIMULATION STUDIO & FLEET TUNING",
+        "03 // CAPACITY OPTIMIZATION (MILP)",
+        "04 // ECONOMICS & QUALITY (NDT)",
+        "05 // BENCHMARK SCENARIO MATRIX",
+        "06 // MATHEMATICAL FORMULATIONS",
     ]
 )
 
 # =============================================================================
-# TAB 1: SYSTEM OVERVIEW & MASS BALANCE
+# TAB 1: CELL TELEMETRY & MASS BALANCE
 # =============================================================================
 
 with tab_overview:
@@ -576,7 +632,7 @@ with tab_overview:
         st.markdown(
             render_kpi(
                 "Conforming Output",
-                f"{bm.conforming_parts} <span style='font-size: 0.95rem; color: #94a3b8;'>UNITS</span>",
+                f"{bm.conforming_parts} <span style='font-size: 0.90rem; color: #8a8c92;'>UNITS</span>",
                 f"Overall Yield: {bm.overall_yield_pct:.1f}%",
                 f"STARTED: {bm.parts_started}",
             ),
@@ -586,7 +642,7 @@ with tab_overview:
         st.markdown(
             render_kpi(
                 "Throughput Rate",
-                f"{bm.throughput_per_hour:.2f} <span style='font-size: 0.95rem; color: #94a3b8;'>/ HR</span>",
+                f"{bm.throughput_per_hour:.2f} <span style='font-size: 0.90rem; color: #8a8c92;'>/ HR</span>",
                 f"Shift Rate: {bm.throughput_per_shift:.1f} / 8h",
                 "FLOW",
             ),
@@ -596,7 +652,7 @@ with tab_overview:
         st.markdown(
             render_kpi(
                 "Mean Lead Time",
-                f"{bm.mean_lead_time_min / 60.0:.1f} <span style='font-size: 0.95rem; color: #94a3b8;'>HRS</span>",
+                f"{bm.mean_lead_time_min / 60.0:.1f} <span style='font-size: 0.90rem; color: #8a8c92;'>HRS</span>",
                 f"Median: {bm.median_lead_time_min / 60.0:.1f} hrs",
                 "CYCLE",
             ),
@@ -616,10 +672,10 @@ with tab_overview:
         b_name = bm.bottleneck_station_name.split("(")[0].strip()
         st.markdown(
             render_kpi(
-                "System Bottleneck",
+                "Critical Bottleneck",
                 b_name.upper(),
                 f"Station Util: {bm.bottleneck_utilization_pct:.1f}%",
-                "CRITICAL",
+                "BINDING",
             ),
             unsafe_allow_html=True,
         )
@@ -660,21 +716,21 @@ with tab_overview:
                     node={
                         "pad": 14,
                         "thickness": 16,
-                        "line": {"color": "#1e293b", "width": 1},
+                        "line": {"color": "#222224", "width": 1},
                         "label": labels,
                         "color": [
-                            "#475569",  # Raw Stock
-                            "#0284c7",  # Bandsaw
-                            "#0369a1",  # CNC Machining
-                            "#075985",  # Deburr
-                            "#6366f1",  # LPBF Build
-                            "#4f46e5",  # Stress Relief
-                            "#4338ca",  # CNC Finishing
-                            "#d97706",  # Shared NDT
-                            "#b45309",  # Rework Bench
-                            "#059669",  # Packaging
-                            "#10b981",  # Conforming Finished Goods
-                            "#e11d48",  # Scrapped Material
+                            "#4a4a4e",  # 0: Raw Stock
+                            "#4a8ad6",  # 1: Bandsaw Cut (Route A)
+                            "#3568a3",  # 2: CNC Machining (Route A)
+                            "#284f7d",  # 3: Deburr & Prep (Route A)
+                            "#8a8c92",  # 4: LPBF Build (Route B)
+                            "#717379",  # 5: Stress Relief (Route B)
+                            "#595a5f",  # 6: CNC Finishing (Route B)
+                            "#d9a441",  # 7: Shared NDT Inspection
+                            "#b8882e",  # 8: Rework Bench
+                            "#347e65",  # 9: Final Packaging
+                            "#44a282",  # 10: Conforming Finished Goods
+                            "#e5566f",  # 11: Scrapped Material
                         ],
                     },
                     link={
@@ -696,7 +752,7 @@ with tab_overview:
                             max(1, scrap_vol),
                             conforming_vol,
                         ],
-                        "color": "rgba(100, 116, 139, 0.25)",
+                        "color": "rgba(74, 138, 214, 0.16)",
                     },
                 )
             ]
@@ -708,13 +764,13 @@ with tab_overview:
         st.markdown(
             """
             <div class="imow-panel">
-                <div class="imow-panel-header">MANUFACTURING ROUTE SPECIFICATIONS</div>
-                <div style="font-size: 0.82rem; line-height: 1.5; color: #94a3b8;">
-                    <p><strong style="color: #38bdf8;">[ROUTE A: CNC SUBTRACTIVE]</strong><br>
-                    Raw 6061-T6 aluminum extrusion billet cut on horizontal bandsaw, roughed & contoured on 3-axis CNC vertical milling center, deburred.</p>
-                    <p><strong style="color: #818cf8;">[ROUTE B: LPBF METAL ADDITIVE]</strong><br>
+                <div class="imow-panel-header">MANUFACTURING PROCESS & ROUTING SPECIFICATIONS</div>
+                <div style="font-size: 0.80rem; line-height: 1.5; color: #8a8c92;">
+                    <p><strong style="color: #4a8ad6;">[ROUTE A: CNC SUBTRACTIVE]</strong><br>
+                    Raw 6061-T6 aluminum extrusion billet cut on horizontal bandsaw, roughed & contoured on 3-axis CNC vertical milling center, vibratory deburred.</p>
+                    <p><strong style="color: #ffffff;">[ROUTE B: LPBF METAL ADDITIVE]</strong><br>
                     AlSi10Mg spherical gas-atomized metal powder melted via Laser Powder Bed Fusion in 4-bracket batches, vacuum stress-relieved, finish CNC machined for precision datum interfaces.</p>
-                    <p><strong style="color: #fbbf24;">[SHARED QUALITY STATION: NDT]</strong><br>
+                    <p><strong style="color: #d9a441;">[SHARED QUALITY STATION: NDT]</strong><br>
                     Liquid Penetrant Surface Testing (PT) per ASTM E1417. Flagged defects undergo 1 rework cycle at finishing bench; repeat failures scrapped.</p>
                 </div>
             </div>
@@ -723,13 +779,13 @@ with tab_overview:
         )
 
 # =============================================================================
-# TAB 2: SIMULATION STUDIO
+# TAB 2: SIMULATION STUDIO & FLEET TUNING
 # =============================================================================
 
 with tab_sim:
     st.markdown(
         """
-        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #94a3b8;">
+        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #8a8c92;">
             DISCRETE-EVENT SIMULATION WORKBENCH // SIMPY 4.1 ENGINE
         </div>
         """,
@@ -737,7 +793,7 @@ with tab_sim:
     )
 
     # Station Parameter Controls
-    with st.expander("WORKSTATION PARAMETERS & MACHINE COUNTS", expanded=True):
+    with st.expander("WORKSTATION FLEET PARAMETERS & MACHINE ALLOCATIONS", expanded=True):
         custom_cfg = copy.deepcopy(st.session_state.base_config)
 
         sc1, sc2, sc3, sc4 = st.columns(4)
@@ -902,7 +958,7 @@ with tab_sim:
 
                 v_rep = verify_simulation_results(res)
                 if not v_rep.is_valid:
-                    st.warning(f"[VERIFICATION WARNING] {'; '.join(v_rep.errors)}")
+                    st.warning(f"[VERIFICATION NOTICE] {'; '.join(v_rep.errors)}")
 
                 st.session_state.custom_results = res
                 st.session_state.custom_metrics = metrics
@@ -920,9 +976,9 @@ with tab_sim:
         st.markdown(
             render_kpi(
                 "Conforming Delivered",
-                f"{act_m.conforming_parts} <span style='font-size: 0.9rem; color: #94a3b8;'>UNITS</span>",
+                f"{act_m.conforming_parts} <span style='font-size: 0.90rem; color: #8a8c92;'>UNITS</span>",
                 f"Started: {act_m.parts_started} | Scrapped: {act_m.scrapped_parts}",
-                "PRODUCTION",
+                "OUTPUT",
             ),
             unsafe_allow_html=True,
         )
@@ -930,9 +986,9 @@ with tab_sim:
         st.markdown(
             render_kpi(
                 "Throughput Rate",
-                f"{act_m.throughput_per_hour:.2f} <span style='font-size: 0.9rem; color: #94a3b8;'>/ HR</span>",
+                f"{act_m.throughput_per_hour:.2f} <span style='font-size: 0.90rem; color: #8a8c92;'>/ HR</span>",
                 f"Per Shift: {act_m.throughput_per_shift:.1f} units",
-                "OUTPUT",
+                "THROUGHPUT",
             ),
             unsafe_allow_html=True,
         )
@@ -940,19 +996,19 @@ with tab_sim:
         st.markdown(
             render_kpi(
                 "Mean Lead Time",
-                f"{act_m.mean_lead_time_min / 60.0:.2f} <span style='font-size: 0.9rem; color: #94a3b8;'>HRS</span>",
+                f"{act_m.mean_lead_time_min / 60.0:.2f} <span style='font-size: 0.90rem; color: #8a8c92;'>HRS</span>",
                 f"Queue Wait: {act_m.mean_wait_time_min / 60.0:.2f} hrs",
-                "LATENCY",
+                "LEAD TIME",
             ),
             unsafe_allow_html=True,
         )
     with rk4:
         st.markdown(
             render_kpi(
-                "Bottleneck Station",
+                "Critical Bottleneck",
                 act_m.bottleneck_station_name.split("(")[0].strip().upper(),
                 f"Raw Util: {act_m.bottleneck_utilization_pct:.1f}%",
-                "CAPACITY",
+                "BINDING",
             ),
             unsafe_allow_html=True,
         )
@@ -973,7 +1029,7 @@ with tab_sim:
                 name="Raw Utilization (%)",
                 x=st_names,
                 y=utils,
-                marker_color="#0284c7",
+                marker_color="#4a8ad6",
             )
         )
         fig_util.add_trace(
@@ -982,8 +1038,8 @@ with tab_sim:
                 x=st_names,
                 y=avails,
                 mode="lines+markers",
-                marker={"color": "#fbbf24", "size": 6},
-                line={"dash": "dash", "width": 1.5, "color": "#fbbf24"},
+                marker={"color": "#d9a441", "size": 6},
+                line={"dash": "dash", "width": 1.5, "color": "#d9a441"},
             )
         )
         fig_util.update_layout(
@@ -1011,8 +1067,8 @@ with tab_sim:
                 barmode="overlay",
                 nbins=25,
                 color_discrete_map={
-                    "Route A: Subtractive": "#0284c7",
-                    "Route B: Additive": "#818cf8",
+                    "Route A: Subtractive": "#4a8ad6",
+                    "Route B: Additive": "#8a8c92",
                 },
             )
             fig_lt.update_layout(
@@ -1040,9 +1096,9 @@ with tab_sim:
             x="Time_Hours",
             y=["Total_WIP", "Conventional_WIP", "Additive_WIP"],
             color_discrete_map={
-                "Total_WIP": "#f8fafc",
-                "Conventional_WIP": "#38bdf8",
-                "Additive_WIP": "#818cf8",
+                "Total_WIP": "#ffffff",
+                "Conventional_WIP": "#4a8ad6",
+                "Additive_WIP": "#8a8c92",
             },
         )
         fig_wip.update_layout(
@@ -1093,104 +1149,13 @@ with tab_sim:
         )
 
 # =============================================================================
-# TAB 3: BENCHMARK SCENARIO MATRIX
-# =============================================================================
-
-with tab_scenarios:
-    st.markdown(
-        """
-        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #94a3b8;">
-            MULTI-SCENARIO BENCHMARKING & SENSITIVITY SUITE
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    if st.button("RUN BENCHMARK SCENARIO SUITE", type="primary"):
-        with st.spinner("Executing multi-scenario benchmark battery..."):
-            mgr = ScenarioManager(st.session_state.base_config)
-            scenario_results = mgr.run_all_standard_scenarios()
-
-            opt_run = mgr.run_optimization_scenario(
-                target_demand=int(st.session_state.base_config.simulation.target_demand_units),
-                capital_budget_usd=620000.0,
-            )
-            scenario_results["optimized"] = opt_run
-
-            st.session_state.scenario_benchmark = scenario_results
-            st.session_state.scenario_df = ScenarioManager.build_comparison_dataframe(
-                scenario_results
-            )
-            st.success("[COMPLETED] Multi-scenario benchmark suite executed.")
-
-    if "scenario_df" in st.session_state:
-        df_scenarios = st.session_state.scenario_df
-        st.dataframe(df_scenarios, use_container_width=True)
-
-        sc1, sc2 = st.columns(2)
-        with sc1:
-            fig_th = px.bar(
-                df_scenarios,
-                x="Scenario Name",
-                y="Throughput (units/hr)",
-                color_discrete_sequence=["#0284c7"],
-            )
-            fig_th.update_layout(xaxis_title="")
-            style_chart(fig_th, height=300, title="THROUGHPUT RATE COMPARISON ACROSS SCENARIOS")
-            st.plotly_chart(fig_th, use_container_width=True)
-
-        with sc2:
-            fig_cost = px.bar(
-                df_scenarios,
-                x="Scenario Name",
-                y="Cost / Conforming Part ($)",
-                color_discrete_sequence=["#818cf8"],
-            )
-            fig_cost.update_layout(xaxis_title="")
-            style_chart(fig_cost, height=300, title="UNIT MANUFACTURING COST COMPARISON")
-            st.plotly_chart(fig_cost, use_container_width=True)
-
-        # Little's Law WIP Congestion vs Lead Time
-        fig_scatter = px.scatter(
-            df_scenarios,
-            x="Time-Weighted WIP",
-            y="Mean Lead Time (min)",
-            size="Total CAPEX ($)",
-            color="Scenario Name",
-            text="Scenario ID",
-            color_discrete_sequence=[
-                "#38bdf8",
-                "#818cf8",
-                "#10b981",
-                "#fbbf24",
-                "#f43f5e",
-                "#94a3b8",
-            ],
-        )
-        fig_scatter.update_traces(textposition="top center")
-        style_chart(fig_scatter, height=340, title="LITTLE'S LAW CONGESTION: WIP VS MEAN LEAD TIME")
-        st.plotly_chart(fig_scatter, use_container_width=True)
-
-        csv_scen = df_scenarios.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            "DOWNLOAD SCENARIO MATRIX (CSV)",
-            data=csv_scen,
-            file_name="cellforge_scenario_comparison.csv",
-            mime="text/csv",
-        )
-    else:
-        st.info(
-            "Execute 'RUN BENCHMARK SCENARIO SUITE' to generate multi-scenario performance data."
-        )
-
-# =============================================================================
-# TAB 4: MILP CAPACITY PLANNING
+# TAB 3: CAPACITY OPTIMIZATION (MILP)
 # =============================================================================
 
 with tab_opt:
     st.markdown(
         """
-        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #94a3b8;">
+        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #8a8c92;">
             MIXED-INTEGER LINEAR PROGRAMMING (MILP) CAPACITY OPTIMIZER // SCIPY.OPTIMIZE.MILP
         </div>
         """,
@@ -1233,15 +1198,15 @@ with tab_opt:
     if st.session_state.opt_result is not None:
         o = st.session_state.opt_result
 
-        status_class = "chip-success" if o.success else "chip-amber"
+        status_class = "chip-success" if o.success else "chip-warning"
         status_text = (
             "[OPTIMAL SOLUTION IDENTIFIED]" if o.success else "[INFEASIBLE CONSTRAINTS DETECTED]"
         )
         st.markdown(
             f"""
             <div style="margin-top: 10px; margin-bottom: 12px;">
-                <span class="chip {status_class}" style="font-size: 0.82rem; padding: 4px 10px;">{status_text}</span>
-                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #94a3b8; margin-left: 10px;">{o.status_message}</span>
+                <span class="chip {status_class}" style="font-size: 0.80rem; padding: 4px 10px;">{status_text}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.80rem; color: #8a8c92; margin-left: 10px;">{o.status_message}</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -1287,7 +1252,7 @@ with tab_opt:
             st.markdown(
                 render_kpi(
                     "Simulated Output",
-                    f"{o.simulated_conforming_output} <span style='font-size: 0.9rem; color: #94a3b8;'>UNITS</span>",
+                    f"{o.simulated_conforming_output} <span style='font-size: 0.90rem; color: #8a8c92;'>UNITS</span>",
                     f"Target Contract: {o.target_demand}",
                     "VERIFIED",
                 ),
@@ -1318,11 +1283,11 @@ with tab_opt:
             f"""
             <div class="imow-panel">
                 <div class="imow-panel-header">DETERMINISTIC PLANNING VS STOCHASTIC SIMULATION VALIDATION</div>
-                <div style="font-size: 0.82rem; line-height: 1.5; color: #94a3b8;">
+                <div style="font-size: 0.80rem; line-height: 1.5; color: #8a8c92;">
                     <p>Linear programming models deterministic flow rates assuming average processing times.
                     Evaluating the recommended machine fleet in the stochastic SimPy simulation introduces queuing delays,
                     LPBF batch accumulation latency, and machine breakdown interruptions.</p>
-                    <p><strong style="color: #38bdf8;">[KINGMAN QUEUEING ANALYSIS]</strong>: {o.stochastic_discrepancy_explanation}</p>
+                    <p><strong style="color: #4a8ad6;">[KINGMAN QUEUEING ANALYSIS]</strong>: {o.stochastic_discrepancy_explanation}</p>
                 </div>
             </div>
             """,
@@ -1351,7 +1316,7 @@ with tab_opt:
         st.table(comp_df)
 
 # =============================================================================
-# TAB 5: ENGINEERING ECONOMICS & NDT
+# TAB 4: ECONOMICS & QUALITY (NDT)
 # =============================================================================
 
 with tab_econ:
@@ -1374,7 +1339,7 @@ with tab_econ:
         st.markdown(
             render_kpi(
                 "Break-Even Volume",
-                f"{f_act.break_even.break_even_units:.0f} <span style='font-size: 0.9rem; color: #94a3b8;'>UNITS</span>",
+                f"{f_act.break_even.break_even_units:.0f} <span style='font-size: 0.90rem; color: #8a8c92;'>UNITS</span>",
                 f"Target Price: ${f_act.break_even.selling_price_per_unit_usd:.2f}",
                 "BREAK-EVEN",
             ),
@@ -1384,7 +1349,7 @@ with tab_econ:
         st.markdown(
             render_kpi(
                 "Capital Payback Period",
-                f"{f_act.break_even.payback_period_years:.1f} <span style='font-size: 0.9rem; color: #94a3b8;'>YEARS</span>",
+                f"{f_act.break_even.payback_period_years:.1f} <span style='font-size: 0.90rem; color: #8a8c92;'>YEARS</span>",
                 f"Projected Annual ROI: {f_act.break_even.return_on_investment_pct:.1f}%",
                 "PAYBACK",
             ),
@@ -1435,13 +1400,13 @@ with tab_econ:
                     hole=0.48,
                     marker={
                         "colors": [
-                            "#0284c7",  # Capital
-                            "#38bdf8",  # Materials
-                            "#818cf8",  # Labor
-                            "#fbbf24",  # Energy
-                            "#d97706",  # NDT
-                            "#e11d48",  # Rework
-                            "#475569",  # Overhead
+                            "#4a8ad6",  # Capital
+                            "#3568a3",  # Materials
+                            "#8a8c92",  # Labor
+                            "#d9a441",  # Energy
+                            "#b8882e",  # NDT
+                            "#e5566f",  # Rework
+                            "#4a4a4e",  # Overhead
                         ]
                     },
                 )
@@ -1466,7 +1431,7 @@ with tab_econ:
                 x=df_cross["Volume"],
                 y=df_cross["Conventional ($)"],
                 name="Route A: Subtractive CNC",
-                line={"color": "#38bdf8", "width": 2.2},
+                line={"color": "#4a8ad6", "width": 2.0},
             )
         )
         fig_cross.add_trace(
@@ -1474,7 +1439,7 @@ with tab_econ:
                 x=df_cross["Volume"],
                 y=df_cross["Additive LPBF ($)"],
                 name="Route B: Additive LPBF",
-                line={"color": "#818cf8", "width": 2.2},
+                line={"color": "#8a8c92", "width": 2.0},
             )
         )
 
@@ -1482,9 +1447,9 @@ with tab_econ:
             fig_cross.add_vline(
                 x=rc.crossover_volume_units,
                 line_dash="dash",
-                line_color="#f43f5e",
+                line_color="#e5566f",
                 annotation_text=f"Crossover: {rc.crossover_volume_units:.0f} units",
-                annotation_font={"size": 10, "color": "#f8fafc"},
+                annotation_font={"size": 10, "color": "#ffffff"},
             )
 
         fig_cross.update_layout(
@@ -1501,7 +1466,7 @@ with tab_econ:
         """
         <div class="imow-panel">
             <div class="imow-panel-header">LIQUID PENETRANT SURFACE TESTING (ASTM E1417) QUALITY TELEMETRY</div>
-            <div style="font-size: 0.82rem; line-height: 1.5; color: #94a3b8;">
+            <div style="font-size: 0.80rem; line-height: 1.5; color: #8a8c92;">
                 Statistical inspection modeled with imperfect sensitivity (True Positive Rate) and specificity (True Negative Rate).
                 Quality escapes pose critical structural risks, while false indications drive rework bench overhead.
             </div>
@@ -1536,10 +1501,10 @@ with tab_econ:
     with qc2:
         st.markdown(
             """
-            <div style="font-size: 0.82rem; line-height: 1.5; color: #94a3b8;">
-                <p><strong style="color: #f43f5e;">[QUALITY ESCAPE // TYPE II ERROR]</strong><br>
-                Defects undetected by penetrant dwell/emulsification passing into dispatch. Structural bracket failure risk in aerospace/industrial service.</p>
-                <p><strong style="color: #fbbf24;">[FALSE ALARM // TYPE I ERROR]</strong><br>
+            <div style="font-size: 0.80rem; line-height: 1.5; color: #8a8c92;">
+                <p><strong style="color: #e5566f;">[QUALITY ESCAPE // TYPE II ERROR]</strong><br>
+                Defects undetected by penetrant dwell/emulsification passing into dispatch. Structural bracket failure risk in industrial service.</p>
+                <p><strong style="color: #d9a441;">[FALSE ALARM // TYPE I ERROR]</strong><br>
                 Conforming parts falsely flagged due to surface roughness or solvent bleed-out, driving unneeded rework bench labor.</p>
             </div>
             """,
@@ -1547,13 +1512,104 @@ with tab_econ:
         )
 
 # =============================================================================
-# TAB 6: MATHEMATICAL SPECIFICATION & FORMULATIONS
+# TAB 5: BENCHMARK SCENARIO MATRIX
+# =============================================================================
+
+with tab_scenarios:
+    st.markdown(
+        """
+        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #8a8c92;">
+            MULTI-SCENARIO BENCHMARKING & SENSITIVITY SUITE
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if st.button("RUN BENCHMARK SCENARIO SUITE", type="primary"):
+        with st.spinner("Executing multi-scenario benchmark battery..."):
+            mgr = ScenarioManager(st.session_state.base_config)
+            scenario_results = mgr.run_all_standard_scenarios()
+
+            opt_run = mgr.run_optimization_scenario(
+                target_demand=int(st.session_state.base_config.simulation.target_demand_units),
+                capital_budget_usd=620000.0,
+            )
+            scenario_results["optimized"] = opt_run
+
+            st.session_state.scenario_benchmark = scenario_results
+            st.session_state.scenario_df = ScenarioManager.build_comparison_dataframe(
+                scenario_results
+            )
+            st.success("[COMPLETED] Multi-scenario benchmark suite executed.")
+
+    if "scenario_df" in st.session_state:
+        df_scenarios = st.session_state.scenario_df
+        st.dataframe(df_scenarios, use_container_width=True)
+
+        sc1, sc2 = st.columns(2)
+        with sc1:
+            fig_th = px.bar(
+                df_scenarios,
+                x="Scenario Name",
+                y="Throughput (units/hr)",
+                color_discrete_sequence=["#4a8ad6"],
+            )
+            fig_th.update_layout(xaxis_title="")
+            style_chart(fig_th, height=300, title="THROUGHPUT RATE COMPARISON ACROSS SCENARIOS")
+            st.plotly_chart(fig_th, use_container_width=True)
+
+        with sc2:
+            fig_cost = px.bar(
+                df_scenarios,
+                x="Scenario Name",
+                y="Cost / Conforming Part ($)",
+                color_discrete_sequence=["#8a8c92"],
+            )
+            fig_cost.update_layout(xaxis_title="")
+            style_chart(fig_cost, height=300, title="UNIT MANUFACTURING COST COMPARISON")
+            st.plotly_chart(fig_cost, use_container_width=True)
+
+        # Little's Law WIP Congestion vs Lead Time
+        fig_scatter = px.scatter(
+            df_scenarios,
+            x="Time-Weighted WIP",
+            y="Mean Lead Time (min)",
+            size="Total CAPEX ($)",
+            color="Scenario Name",
+            text="Scenario ID",
+            color_discrete_sequence=[
+                "#4a8ad6",
+                "#8a8c92",
+                "#44a282",
+                "#d9a441",
+                "#e5566f",
+                "#dedee0",
+            ],
+        )
+        fig_scatter.update_traces(textposition="top center")
+        style_chart(fig_scatter, height=340, title="LITTLE'S LAW CONGESTION: WIP VS MEAN LEAD TIME")
+        st.plotly_chart(fig_scatter, use_container_width=True)
+
+        csv_scen = df_scenarios.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            "DOWNLOAD SCENARIO MATRIX (CSV)",
+            data=csv_scen,
+            file_name="cellforge_scenario_comparison.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info(
+            "Execute 'RUN BENCHMARK SCENARIO SUITE' to generate multi-scenario performance data."
+        )
+
+# =============================================================================
+# TAB 6: MATHEMATICAL FORMULATIONS
 # =============================================================================
 
 with tab_notes:
     st.markdown(
         """
-        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #94a3b8;">
+        <div style="margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #8a8c92;">
             MATHEMATICAL FORMULATIONS, DISCLOSURES & TECHNICAL LIMITATIONS
         </div>
         """,
